@@ -25,7 +25,7 @@ import {
 import { loadLocalFolderCatalog } from './library/local-folder.js';
 import { SAVED_CHANNELS_PATH } from './library/paths.js';
 import { buildTrackSearchScopes, searchTracks } from './library/search.js';
-import { loadTrackVolume, saveTrackVolume } from './library/settings.js';
+import { loadLastSource, loadTrackVolume, saveLastSource, saveTrackVolume } from './library/settings.js';
 import type { RuntimeLibraryCatalog, RuntimeTrack } from './library/types.js';
 import { onAnyKey, onKey, startInput } from './input.js';
 import { PRESETS } from './presets.js';
@@ -247,31 +247,113 @@ export async function startApp(opts: AppOptions): Promise<void> {
   let activeLocalFolderSlug: string | undefined;
   let activeUrl: string | undefined;
   let activeSourceKind: 'none' | 'local' | 'stream' = 'none';
+  let currentCatalog: RuntimeLibraryCatalog = createEmptyCatalog();
+  let startupWelcomeError = '';
 
-  if (activeStreamInput) {
-    const resolved = resolveStreamInput(activeStreamInput, savedChannels);
+  const persistSourceStore = () => {
+    saveChannelStore({ channels: savedChannels, recentStreams, localFolders });
+  };
+
+  const rememberLocalSource = (path: string, label?: string) => {
+    saveLastSource({
+      kind: 'local',
+      path: path.trim(),
+      label: label?.trim() || undefined,
+    });
+  };
+
+  const rememberStreamSource = (input: string, label?: string) => {
+    saveLastSource({
+      kind: 'stream',
+      input: input.trim(),
+      label: label?.trim() || undefined,
+    });
+  };
+
+  const initializeStartupLocalFolder = (path: string, explicitLabel?: string) => {
+    const normalizedPath = path.trim();
+    const normalizedLabel = explicitLabel?.trim() || basename(normalizedPath);
+    const catalog = loadLocalFolderCatalog(normalizedPath, normalizedLabel);
+    const saved = upsertLocalFolder(localFolders, normalizedLabel, normalizedPath);
+    localFolders = saved.localFolders;
+    persistSourceStore();
+
+    currentCatalog = catalog;
+    activeSourceKind = 'local';
+    activeLocalFolderSlug = saved.folder.slug;
+    activeUrl = undefined;
+    activeStreamInput = undefined;
+    activeStreamLabel = undefined;
+    activeChannelSlug = undefined;
+    rememberLocalSource(normalizedPath, saved.folder.label);
+  };
+
+  const initializeStartupStream = (input: string) => {
+    const resolved = resolveStreamInput(input, savedChannels);
+    if (resolved.savedChannels) {
+      savedChannels = resolved.savedChannels;
+    }
+    if (!resolved.channelSlug) {
+      recentStreams = upsertRecentStream(recentStreams, resolved.inputValue, resolved.displayLabel);
+    }
+    persistSourceStore();
+
     activeUrl = resolved.resolvedUrl;
     activeStreamInput = resolved.inputValue;
     activeStreamLabel = resolved.displayLabel;
     activeChannelSlug = resolved.channelSlug;
     activeSourceKind = 'stream';
-    if (resolved.savedChannels) {
-      savedChannels = resolved.savedChannels;
-    }
-    if (!resolved.channelSlug) {
-      recentStreams = upsertRecentStream(recentStreams, activeStreamInput, resolved.displayLabel);
-    }
-    if (resolved.savedChannels || !resolved.channelSlug) {
-      saveChannelStore({ channels: savedChannels, recentStreams, localFolders });
-    }
+    activeLocalFolderSlug = undefined;
+    currentCatalog = createEmptyCatalog();
+    rememberStreamSource(resolved.inputValue, resolved.displayLabel);
+  };
+
+  if (activeStreamInput) {
+    initializeStartupStream(activeStreamInput);
   }
 
-  let currentCatalog: RuntimeLibraryCatalog = createEmptyCatalog();
-
   if (opts.folder) {
-    currentCatalog = loadLocalFolderCatalog(opts.folder);
-    activeSourceKind = 'local';
-    activeLocalFolderSlug = findLocalFolder(localFolders, opts.folder)?.slug;
+    initializeStartupLocalFolder(opts.folder);
+  }
+
+  if (!opts.home && !opts.url && !opts.folder) {
+    const rememberedSource = loadLastSource();
+    const startupAttempts: Array<() => void> = [];
+
+    if (rememberedSource) {
+      startupAttempts.push(() =>
+        rememberedSource.kind === 'local'
+          ? initializeStartupLocalFolder(rememberedSource.path, rememberedSource.label)
+          : initializeStartupStream(rememberedSource.input),
+      );
+    }
+    if (localFolders.length) {
+      const firstFolder = localFolders[0];
+      startupAttempts.push(() => initializeStartupLocalFolder(firstFolder.path, firstFolder.label));
+    }
+    if (savedChannels.length) {
+      const firstChannel = savedChannels[0];
+      startupAttempts.push(() => initializeStartupStream(firstChannel.slug));
+    }
+    if (recentStreams.length) {
+      const firstRecent = recentStreams[0];
+      startupAttempts.push(() => initializeStartupStream(firstRecent.input));
+    }
+
+    let lastStartupError = '';
+    for (const attempt of startupAttempts) {
+      if (activeUrl || currentCatalog.trackCount > 0) break;
+      try {
+        attempt();
+        lastStartupError = '';
+      } catch (error) {
+        lastStartupError = formatErrorMessage(error);
+      }
+    }
+
+    if (!activeUrl && currentCatalog.trackCount === 0 && rememberedSource && lastStartupError) {
+      startupWelcomeError = `Last source unavailable. ${lastStartupError}`;
+    }
   }
 
   let availableTracks = [...currentCatalog.tracks];
@@ -306,7 +388,7 @@ export async function startApp(opts: AppOptions): Promise<void> {
   let sourceQuery = '';
   let sourceSelectedIndex = 0;
   let sourceError = '';
-  let welcomeError = '';
+  let welcomeError = startupWelcomeError;
   let sourceEditorMode: 'add' | 'edit' = 'add';
   let sourceEditorKind: SourceEditorKind = 'local';
   let sourceEditorField: SourceEditorField = 'target';
@@ -334,10 +416,6 @@ export async function startApp(opts: AppOptions): Promise<void> {
     }
     searchSelectedIndex = Math.max(0, Math.min(searchSelectedIndex, results.length - 1));
     return results;
-  };
-
-  const persistSourceStore = () => {
-    saveChannelStore({ channels: savedChannels, recentStreams, localFolders });
   };
 
   const preferredFolderInitialPath = (preferred?: string): string | undefined => {
@@ -507,6 +585,10 @@ export async function startApp(opts: AppOptions): Promise<void> {
     activeStreamInput = undefined;
     activeStreamLabel = undefined;
     activeChannelSlug = undefined;
+    rememberLocalSource(
+      catalog.rootDir,
+      localFolders.find((folder) => folder.slug === sourceSlug)?.label ?? basename(catalog.rootDir),
+    );
 
     if (engine) {
       engine.setTrack(currentTrack.filePath);
@@ -795,7 +877,7 @@ export async function startApp(opts: AppOptions): Promise<void> {
     sourceSelectedIndex = activeSourceChoiceIndex();
   };
 
-  const shouldOpenWelcome = Boolean(opts.home) || (!opts.url && !opts.folder);
+  const shouldOpenWelcome = Boolean(opts.home) || (!activeUrl && !currentTrack);
 
   if (!existsSync(SAVED_CHANNELS_PATH)) {
     persistSourceStore();
@@ -827,6 +909,7 @@ export async function startApp(opts: AppOptions): Promise<void> {
     searchQuery = '';
     searchSelectedIndex = 0;
     persistSourceStore();
+    rememberStreamSource(resolved.inputValue, resolved.displayLabel);
     engine.setStream(resolved.resolvedUrl);
     ensurePlaybackStarted();
   };

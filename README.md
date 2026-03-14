@@ -78,7 +78,7 @@ musicli --folder ~/Music/Lofi
 musicli --url https://www.youtube.com/watch?v=jfKfPfyJRdk
 ```
 
-If you just run `musicli`, it opens an idle welcome screen. Nothing starts playing until you choose a source.
+On first run, `musicli` opens an idle welcome screen. After you choose a local folder or stream, Musicli remembers the last source and starts there automatically next time. Use `--home` anytime to reopen the welcome screen on launch.
 
 ---
 
@@ -94,7 +94,7 @@ musicli --preset snow
 musicli --home
 ```
 
-Running `musicli` with no source starts idle and opens a welcome screen. It does not auto-play anything.
+On first launch, running `musicli` with no source starts idle and opens a welcome screen. After that, Musicli resumes the last source you used unless you pass `--home`.
 
 - `Local Folder` is the default path.
 - On macOS, Musicli opens the system folder picker so you can choose music without typing the path.
