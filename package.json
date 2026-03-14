@@ -1,6 +1,6 @@
 {
   "name": "@bilalpm/musicli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A simple music player in your terminal",
   "type": "module",
   "bin": {

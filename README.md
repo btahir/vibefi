@@ -70,6 +70,12 @@ npm install -g @bilalpm/musicli
 musicli
 ```
 
+If you installed Musicli with npm, you can update it in place later with:
+
+```bash
+musicli update
+```
+
 ### First Session
 
 ```bash

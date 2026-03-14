@@ -5,6 +5,7 @@ import { showSplash } from './ui/splash.js';
 import { startApp } from './app.js';
 import { PRESETS } from './presets.js';
 import { listSceneNames, type SceneRendererMode } from './scenes/catalog.js';
+import { runSelfUpdate } from './update.js';
 import {
   loadActiveTrackCatalog,
   loadBundledTrackCatalog,
@@ -93,6 +94,15 @@ program
   .description('A simple music player in your terminal')
   .showHelpAfterError()
   .version(packageJson.version);
+
+program
+  .command('update')
+  .description('update the global npm install of musicli to the latest version')
+  .action(() =>
+    runCommand(() => {
+      runSelfUpdate(packageJson.name);
+    }),
+  );
 
 const libraryCommand = program.command('library').description('manage installable track libraries');
 
