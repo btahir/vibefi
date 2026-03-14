@@ -66,7 +66,7 @@ node dist/index.js
 ### Install As a Package
 
 ```bash
-npm install -g @btahir/musicli
+npm install -g @bilalpm/musicli
 musicli
 ```
 
