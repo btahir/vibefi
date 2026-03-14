@@ -1,10 +1,10 @@
 {
-  "name": "vibefi",
+  "name": "@btahir/musicli",
   "version": "0.1.0",
   "description": "your focus room in the terminal",
   "type": "module",
   "bin": {
-    "vibefi": "./dist/index.js"
+    "musicli": "./dist/index.js"
   },
   "main": "./dist/index.js",
   "scripts": {
@@ -34,6 +34,14 @@
     "ambient",
     "focus"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/btahir/musicli.git"
+  },
+  "homepage": "https://github.com/btahir/musicli#readme",
+  "bugs": {
+    "url": "https://github.com/btahir/musicli/issues"
+  },
   "license": "MIT",
   "dependencies": {
     "commander": "^13.1.0",

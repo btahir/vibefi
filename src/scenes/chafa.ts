@@ -41,7 +41,7 @@ function clamp(value: number, min: number, max: number): number {
 
 function ensureTempRoot(): string {
   if (!tempRoot) {
-    tempRoot = mkdtempSync(join(tmpdir(), 'vibefi-chafa-'));
+    tempRoot = mkdtempSync(join(tmpdir(), 'musicli-chafa-'));
   }
 
   if (!cleanupRegistered) {
@@ -245,7 +245,7 @@ export function parseChafaAnsi(ansi: string, width: number, height: number): Sce
 }
 
 export function resolveChafaCommand(): string | null {
-  const override = process.env.VIBEFI_CHAFA_BIN?.trim();
+  const override = process.env.MUSICLI_CHAFA_BIN?.trim();
   if (override) return override;
 
   try {

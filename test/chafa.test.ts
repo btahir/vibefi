@@ -23,7 +23,7 @@ test('parseChafaAnsi maps sgr colors into scene cells', () => {
 });
 
 test('loadScenes uses the configured chafa command when requested', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'vibefi-chafa-test-'));
+  const dir = mkdtempSync(join(tmpdir(), 'musicli-chafa-test-'));
   const scriptPath = join(dir, 'fake-chafa');
   writeFileSync(
     scriptPath,
@@ -34,8 +34,8 @@ test('loadScenes uses the configured chafa command when requested', () => {
   );
   chmodSync(scriptPath, 0o755);
 
-  const previous = process.env.VIBEFI_CHAFA_BIN;
-  process.env.VIBEFI_CHAFA_BIN = scriptPath;
+  const previous = process.env.MUSICLI_CHAFA_BIN;
+  process.env.MUSICLI_CHAFA_BIN = scriptPath;
 
   try {
     const { sceneNames, scenes } = loadScenes('chafa');
@@ -53,9 +53,9 @@ test('loadScenes uses the configured chafa command when requested', () => {
     assert.equal(buffer.get(1, 0)?.char, '█');
   } finally {
     if (previous === undefined) {
-      delete process.env.VIBEFI_CHAFA_BIN;
+      delete process.env.MUSICLI_CHAFA_BIN;
     } else {
-      process.env.VIBEFI_CHAFA_BIN = previous;
+      process.env.MUSICLI_CHAFA_BIN = previous;
     }
   }
 });

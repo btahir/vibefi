@@ -441,7 +441,7 @@ export function renderHelpOverlay(buffer: CellBuffer): void {
     { key: 'm', action: 'mute all audio' },
     { key: 's', action: 'reshuffle the queue' },
     { key: 'o', action: 'open the sources manager' },
-    { key: 'q', action: 'quit Vibefi' },
+    { key: 'q', action: 'quit Musicli' },
   ]);
   row += 1;
 

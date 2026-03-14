@@ -6,7 +6,7 @@ import test from 'node:test';
 import { loadLocalFolderCatalog } from '../src/library/local-folder.js';
 
 test('loadLocalFolderCatalog scans nested audio files into runtime tracks', () => {
-  const root = mkdtempSync(join(tmpdir(), 'vibefi-local-folder-'));
+  const root = mkdtempSync(join(tmpdir(), 'musicli-local-folder-'));
 
   try {
     mkdirSync(join(root, 'Jazzhop'));

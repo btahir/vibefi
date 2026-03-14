@@ -36,8 +36,8 @@ writeJson(join(DIST_DIR, 'packs', 'starter.json'), starterManifest);
 writeJson(join(DIST_DIR, 'packs', 'full.json'), fullManifest);
 writeJson(join(DIST_DIR, 'repository.json'), {
   schemaVersion: 1,
-  id: 'vibefi-library',
-  title: 'Vibefi Library',
+  id: 'musicli-library',
+  title: 'Musicli Library',
   version: pkg.version,
   generatedAt,
   contentBase: '.',
@@ -60,8 +60,8 @@ writeJson(join(DIST_DIR, 'repository.json'), {
 
 writeFileSync(
   join(DIST_DIR, 'README.md'),
-  `# Vibefi Library\n\n` +
-    `This staged folder is ready to publish as the standalone Vibefi music library source.\n\n` +
+  `# Musicli Library\n\n` +
+    `This staged folder is ready to publish as the standalone Musicli music library source.\n\n` +
     `- \`repository.json\` is the install entrypoint.\n` +
     `- \`catalog.json\` describes the full track catalog.\n` +
     `- \`packs/starter.json\` and \`packs/full.json\` are the installable pack manifests.\n` +

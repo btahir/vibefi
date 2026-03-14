@@ -26,7 +26,7 @@ export function buildFolderPickerInvocation(
   options: FolderPickerOptions = {},
   commandChecker: FolderPickerCommandChecker = hasCommand,
 ): FolderPickerInvocation | null {
-  const prompt = options.prompt || 'Select a music folder for Vibefi:';
+  const prompt = options.prompt || 'Select a music folder for Musicli:';
 
   if (platform === 'darwin' && commandChecker('osascript')) {
     const script =

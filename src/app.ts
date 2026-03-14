@@ -427,7 +427,7 @@ export async function startApp(opts: AppOptions): Promise<void> {
     try {
       const previousTarget = sourceTargetInput.value.trim();
       const selectedPath = pickDirectory({
-        prompt: 'Choose a music folder for Vibefi',
+        prompt: 'Choose a music folder for Musicli',
         initialPath: preferredFolderInitialPath(previousTarget),
       });
       if (!selectedPath) return;
@@ -460,7 +460,7 @@ export async function startApp(opts: AppOptions): Promise<void> {
 
     try {
       const selectedPath = pickDirectory({
-        prompt: 'Choose a music folder for Vibefi',
+        prompt: 'Choose a music folder for Musicli',
         initialPath: preferredFolderInitialPath(),
       });
 
@@ -643,7 +643,7 @@ export async function startApp(opts: AppOptions): Promise<void> {
         label: 'Local Folder',
         detail: folderPickerAvailable
           ? 'Browse for a folder on your machine and start there.'
-          : 'Point Vibefi at a folder of tracks on your machine.',
+          : 'Point Musicli at a folder of tracks on your machine.',
         recommended: true,
       },
       {

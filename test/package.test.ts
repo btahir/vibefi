@@ -10,7 +10,7 @@ function npmCommand(): string {
 }
 
 test('npm pack includes scenes, ambience assets, and install scripts', () => {
-  const cacheDir = mkdtempSync(join(tmpdir(), 'vibefi-npm-cache-'));
+  const cacheDir = mkdtempSync(join(tmpdir(), 'musicli-npm-cache-'));
   const raw = execFileSync(npmCommand(), ['pack', '--dry-run', '--json', '--ignore-scripts'], {
     encoding: 'utf-8',
     env: {

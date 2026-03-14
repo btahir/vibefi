@@ -75,7 +75,7 @@ test('renderSourcesOverlay shows actions, sources, and details', () => {
         kind: 'action',
         action: 'add-local',
         label: 'Add Local Folder',
-        detail: 'Point Vibefi at a music folder',
+        detail: 'Point Musicli at a music folder',
         value: 'action:add-local',
       },
       {

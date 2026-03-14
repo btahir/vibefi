@@ -11,8 +11,8 @@ function readJson(path: string) {
 }
 
 test('installPack installs and reuses the starter pack from the local repository source', async () => {
-  const fixtureRoot = mkdtempSync(join(tmpdir(), 'vibefi-library-source-'));
-  const targetRoot = mkdtempSync(join(tmpdir(), 'vibefi-library-target-'));
+  const fixtureRoot = mkdtempSync(join(tmpdir(), 'musicli-library-source-'));
+  const targetRoot = mkdtempSync(join(tmpdir(), 'musicli-library-target-'));
 
   const trackBytes = Buffer.from('fake mp3 bytes');
   const trackHash = createHash('sha256').update(trackBytes).digest('hex');

@@ -1,18 +1,18 @@
-# Vibe-Fi
+# Musicli
 
 ### *your focus room in the terminal*
 
-![vibefi hero](docs/images/hero.png)
+![musicli hero](docs/images/hero.png)
 
 > Open your terminal. Set the mood. Stay in flow.
 >
-> `vibefi` is a keyboard-first lofi player for local folders and stream URLs, with scene visuals, long-form ambience loops, and in-terminal search.
+> `musicli` is a keyboard-first lofi player for local folders and stream URLs, with scene visuals, long-form ambience loops, and in-terminal search.
 
-[Why Vibefi](#why-vibefi) · [Quick Start](#quick-start) · [Use It](#use-it) · [Controls](#controls) · [Presets](#presets) · [Library](#library) · [Development](#development)
+[Why Musicli](#why-musicli) · [Quick Start](#quick-start) · [Use It](#use-it) · [Controls](#controls) · [Presets](#presets) · [Library](#library) · [Development](#development)
 
 ---
 
-## Why Vibefi
+## Why Musicli
 
 - Full-screen terminal playback built for long focus sessions, not playlist management overhead.
 - Live ambience mixing with six long-session layers: `rain`, `cafe`, `fire`, `thunder`, `forest`, and `city`.
@@ -23,7 +23,7 @@
 - Local-folder-first onboarding with a native folder picker on supported systems.
 - A catalog-first music library with installable packs, ready for a standalone library repo or release assets.
 
-`vibefi` is not trying to be a generic music app in a terminal. The point is atmosphere with very little friction.
+`musicli` is not trying to be a generic music app in a terminal. The point is atmosphere with very little friction.
 
 ---
 
@@ -50,8 +50,8 @@ sudo apt install ffmpeg chafa zenity
 ### Run From Source
 
 ```bash
-git clone https://github.com/vibefi-app/vibefi.git
-cd vibefi
+git clone https://github.com/btahir/musicli.git
+cd musicli
 npm install
 npm run dev
 ```
@@ -66,19 +66,19 @@ node dist/index.js
 ### Install As a Package
 
 ```bash
-npm install -g vibefi
-vibefi
+npm install -g @btahir/musicli
+musicli
 ```
 
 ### First Session
 
 ```bash
-vibefi
-vibefi --folder ~/Music/Lofi
-vibefi --url https://www.youtube.com/watch?v=jfKfPfyJRdk
+musicli
+musicli --folder ~/Music/Lofi
+musicli --url https://www.youtube.com/watch?v=jfKfPfyJRdk
 ```
 
-If you just run `vibefi`, it opens an idle welcome screen. Nothing starts playing until you choose a source.
+If you just run `musicli`, it opens an idle welcome screen. Nothing starts playing until you choose a source.
 
 ---
 
@@ -87,39 +87,39 @@ If you just run `vibefi`, it opens an idle welcome screen. Nothing starts playin
 ### Start Listening
 
 ```bash
-vibefi
-vibefi --preset chill
-vibefi --preset jazz
-vibefi --preset snow
-vibefi --home
+musicli
+musicli --preset chill
+musicli --preset jazz
+musicli --preset snow
+musicli --home
 ```
 
-Running `vibefi` with no source starts idle and opens a welcome screen. It does not auto-play anything.
+Running `musicli` with no source starts idle and opens a welcome screen. It does not auto-play anything.
 
 - `Local Folder` is the default path.
-- On macOS, Vibefi opens the system folder picker so you can choose music without typing the path.
+- On macOS, Musicli opens the system folder picker so you can choose music without typing the path.
 - On Linux, it uses `zenity` or `kdialog` when available.
-- If no native picker is available, Vibefi falls back to the in-terminal path editor.
+- If no native picker is available, Musicli falls back to the in-terminal path editor.
 - If you already know the source, `--folder` and `--url` skip onboarding and go straight in.
 
 ### Shape the Room
 
 ```bash
-vibefi --rain 0.40 --city 0.20
-vibefi --forest 0.50
-vibefi --fire 0.25 --cafe 0.20
-vibefi --scene alley
-vibefi --scene-renderer chafa
+musicli --rain 0.40 --city 0.20
+musicli --forest 0.50
+musicli --fire 0.25 --cafe 0.20
+musicli --scene alley
+musicli --scene-renderer chafa
 ```
 
-The `Track` row starts at `0.25` on first run. After that, Vibefi remembers the last `Track` level you used in `~/.vibefi/settings.json`.
+The `Track` row starts at `0.25` on first run. After that, Musicli remembers the last `Track` level you used in `~/.musicli/settings.json`.
 
 ### Bring Your Own Stream
 
 ```bash
-vibefi --url http://myserver:8000/lofi-stream
-vibefi --url https://example.com/stream.m3u8
-vibefi --url https://www.youtube.com/watch?v=jfKfPfyJRdk
+musicli --url http://myserver:8000/lofi-stream
+musicli --url https://example.com/stream.m3u8
+musicli --url https://www.youtube.com/watch?v=jfKfPfyJRdk
 ```
 
 Inside the app, press `o` to open `Sources`.
@@ -142,11 +142,11 @@ Use `o` anytime to reopen your sources.
 ### Use a Local Folder
 
 ```bash
-vibefi --folder ~/Music/Lofi
-vibefi --folder "/Volumes/Archive/Focus Mixes"
+musicli --folder ~/Music/Lofi
+musicli --folder "/Volumes/Archive/Focus Mixes"
 ```
 
-Inside the app, press `o`, then `a`. On supported systems that opens a native folder picker; otherwise Vibefi falls back to a manual path editor.
+Inside the app, press `o`, then `a`. On supported systems that opens a native folder picker; otherwise Musicli falls back to a manual path editor.
 
 ### Load Open Lo-fi
 
@@ -156,24 +156,24 @@ The simplest flow today is:
 
 1. Download `openlofi.zip` from the latest release.
 2. Extract it anywhere on your machine.
-3. Point Vibefi at the extracted folder.
+3. Point Musicli at the extracted folder.
 
 Example:
 
 ```bash
 curl -L https://github.com/btahir/open-lofi/releases/latest/download/openlofi.zip -o openlofi.zip
 unzip openlofi.zip -d ~/Music/open-lofi
-vibefi --folder ~/Music/open-lofi
+musicli --folder ~/Music/open-lofi
 ```
 
-Or just run `vibefi`, choose `Local Folder`, and pick the extracted `open-lofi` folder from the welcome flow.
+Or just run `musicli`, choose `Local Folder`, and pick the extracted `open-lofi` folder from the welcome flow.
 
 Local folders can be:
 
 - a single folder full of tracks
 - a nested folder tree with subfolders
 
-Vibefi scans recursively and picks up:
+Musicli scans recursively and picks up:
 
 - `aac`
 - `flac`
@@ -183,15 +183,15 @@ Vibefi scans recursively and picks up:
 - `opus`
 - `wav`
 
-For nested folders, Vibefi uses the first subfolder level as the category label inside search and queue metadata.
+For nested folders, Musicli uses the first subfolder level as the category label inside search and queue metadata.
 
 ### Manage the Library
 
 ```bash
-vibefi library status
-vibefi library packs --source https://example.com/repository.json
-vibefi library install starter --source https://example.com/repository.json
-vibefi library install full --source https://example.com/repository.json
+musicli library status
+musicli library packs --source https://example.com/repository.json
+musicli library install starter --source https://example.com/repository.json
+musicli library install full --source https://example.com/repository.json
 ```
 
 ---
@@ -313,25 +313,25 @@ The current ambience set is tuned for longer sessions rather than short one-shot
 
 ## Library
 
-The current app flow is local folders and stream URLs first. The `library` commands are there to support installable Vibefi-curated packs and a future standalone library repo.
+The current app flow is local folders and stream URLs first. The `library` commands are there to support installable Musicli-curated packs and a future standalone library repo.
 
-That gives `vibefi` two useful modes:
+That gives `musicli` two useful modes:
 
-- it can work with installable Vibefi packs
+- it can work with installable Musicli packs
 - it can grow into a larger standalone library without changing the player architecture
 
-Pack installs are manifest-driven. The CLI reads a local or remote `repository.json`, installs the selected pack into `~/.vibefi/library`, and skips unchanged files on reinstall.
+Pack installs are manifest-driven. The CLI reads a local or remote `repository.json`, installs the selected pack into `~/.musicli/library`, and skips unchanged files on reinstall.
 
-The main `vibefi` package does not ship a music pack by default in this repo state, so `library packs` / `library install` should be used with `--source` unless you set `VIBEFI_LIBRARY_SOURCE`.
+The main `musicli` package does not ship a music pack by default in this repo state, so `library packs` / `library install` should be used with `--source` unless you set `MUSICLI_LIBRARY_SOURCE`.
 
 Useful library commands:
 
 ```bash
-vibefi library path
-vibefi library status
-vibefi library packs --source https://example.com/repository.json
-vibefi library install starter --source https://example.com/repository.json
-vibefi library install full --source https://example.com/repository.json
+musicli library path
+musicli library status
+musicli library packs --source https://example.com/repository.json
+musicli library install starter --source https://example.com/repository.json
+musicli library install full --source https://example.com/repository.json
 ```
 
 ---
@@ -368,7 +368,7 @@ npm run library:stage
 
 ## Disclaimer
 
-`vibefi` is designed for use with local folders, installable library packs, and user-provided stream URLs. If you use external sources, including YouTube via `yt-dlp`, you are responsible for complying with the source platform's terms and any applicable laws.
+`musicli` is designed for use with local folders, installable library packs, and user-provided stream URLs. If you use external sources, including YouTube via `yt-dlp`, you are responsible for complying with the source platform's terms and any applicable laws.
 
 ---
 

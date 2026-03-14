@@ -21,7 +21,7 @@ if (!existsSync(COREAUDIO_PATH)) {
 
 const original = readFileSync(COREAUDIO_PATH, 'utf8');
 
-if (original.includes('vibefi: patched CoreAudio underrun handling')) {
+if (original.includes('musicli: patched CoreAudio underrun handling')) {
   process.exit(0);
 }
 
@@ -47,7 +47,7 @@ const replacement = [
   '\t\t/* Only play if we have data left */',
   '\t\tif ( sfifo_used( &ca->fifo ) < (int)wanted ) {',
   '\t\t\tif(!ca->decode_done) {',
-  '\t\t\t\t/* vibefi: patched CoreAudio underrun handling */',
+  '\t\t\t\t/* musicli: patched CoreAudio underrun handling */',
   '\t\t\t\tmemset(dest, 0, wanted);',
   '\t\t\t\toutOutputData->mBuffers[n].mDataByteSize = wanted;',
   '\t\t\t\toutOutputData->mBuffers[n].mData = dest;',

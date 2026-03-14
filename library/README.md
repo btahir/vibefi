@@ -1,6 +1,6 @@
 # Library Architecture
 
-`vibefi` treats the music library as a separately publishable content source.
+`musicli` treats the music library as a separately publishable content source.
 
 Authored source of truth:
 
@@ -18,7 +18,7 @@ Generated library metadata:
 - `library/manifests/starter.json`
   Install manifest for the starter pack
 - `library/repository.local.json`
-  Local install source used by `vibefi library install ...`
+  Local install source used by `musicli library install ...`
 
 Publishing flow:
 
@@ -40,11 +40,11 @@ The staged publish tree contains:
 
 CLI install flow:
 
-- `vibefi library packs --source <repository.json>`
+- `musicli library packs --source <repository.json>`
   Show available packs from a published source
-- `vibefi library install starter --source <repository.json>`
-  Install the curated starter pack into `~/.vibefi/library`
-- `vibefi library install full --source <repository.json>`
+- `musicli library install starter --source <repository.json>`
+  Install the curated starter pack into `~/.musicli/library`
+- `musicli library install full --source <repository.json>`
   Install from a remote or local published source
 
-The runtime prefers `~/.vibefi/library/catalog.json` when present. Some builds may also ship a bundled fallback catalog, but that is optional rather than assumed.
+The runtime prefers `~/.musicli/library/catalog.json` when present. Some builds may also ship a bundled fallback catalog, but that is optional rather than assumed.

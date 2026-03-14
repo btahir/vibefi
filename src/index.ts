@@ -77,7 +77,7 @@ function createLibrarySourceOption(): Option {
     '--source <ref>',
     DEFAULT_LIBRARY_SOURCE_PATH
       ? 'repository manifest path or URL'
-      : 'repository manifest path or URL (required unless VIBEFI_LIBRARY_SOURCE is set)',
+      : 'repository manifest path or URL (required unless MUSICLI_LIBRARY_SOURCE is set)',
   );
 
   if (DEFAULT_LIBRARY_SOURCE_PATH) {
@@ -88,7 +88,7 @@ function createLibrarySourceOption(): Option {
 }
 
 program
-  .name('vibefi')
+  .name('musicli')
   .description('your focus room in the terminal')
   .showHelpAfterError()
   .version('0.1.0');
@@ -133,7 +133,7 @@ libraryCommand
 
 libraryCommand
   .command('install')
-  .description('install a pack into the local vibefi library')
+  .description('install a pack into the local musicli library')
   .argument('[pack]', 'pack to install', 'starter')
   .addOption(createLibrarySourceOption())
   .option('--force', 'overwrite files even when checksums match')

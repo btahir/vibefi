@@ -3,9 +3,9 @@ import gradient from 'gradient-string';
 
 export async function showSplash(): Promise<void> {
   return new Promise((resolve) => {
-    figlet.text('vibefi', { font: 'Big' }, (err, result) => {
+    figlet.text('musicli', { font: 'Big' }, (err, result) => {
       if (err || !result) {
-        process.stdout.write('\n  vibefi\n\n');
+        process.stdout.write('\n  musicli\n\n');
         setTimeout(resolve, 800);
         return;
       }

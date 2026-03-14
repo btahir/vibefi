@@ -4,7 +4,7 @@ export function checkInteractiveTerminal(): void {
   if (process.stdin.isTTY && process.stdout.isTTY) return;
 
   console.error(
-    '\n  vibefi requires an interactive terminal.\n\n' +
+    '\n  musicli requires an interactive terminal.\n\n' +
     '  Run it directly in a TTY instead of piping or redirecting stdin/stdout.\n'
   );
   process.exit(1);

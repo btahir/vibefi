@@ -14,7 +14,7 @@ test('normalizeTrackVolume clamps and rounds values safely', () => {
 });
 
 test('saveTrackVolume persists the last used track level', () => {
-  const tempRoot = mkdtempSync(join(tmpdir(), 'vibefi-settings-'));
+  const tempRoot = mkdtempSync(join(tmpdir(), 'musicli-settings-'));
   const settingsPath = join(tempRoot, 'settings.json');
 
   try {

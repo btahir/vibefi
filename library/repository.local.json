@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "id": "vibefi-local-library",
-  "title": "Vibefi Local Library Source",
+  "id": "musicli-local-library",
+  "title": "Musicli Local Library Source",
   "version": "0.1.0",
   "generatedAt": "2026-03-14T03:09:02.129Z",
   "contentBase": "..",
   "catalog": "../tracks/catalog.json",
   "packs": {
     "starter": {
-      "title": "Vibefi Starter Pack",
-      "description": "A curated one-track-per-category introduction to the full Vibefi library.",
+      "title": "Musicli Starter Pack",
+      "description": "A curated one-track-per-category introduction to the full Musicli library.",
       "manifest": "manifests/starter.json",
       "trackCount": 10
     },
     "full": {
-      "title": "Vibefi Full Library",
-      "description": "The complete curated Vibefi library.",
+      "title": "Musicli Full Library",
+      "description": "The complete curated Musicli library.",
       "manifest": "manifests/full.json",
       "trackCount": 166
     }

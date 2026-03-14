@@ -3,7 +3,7 @@ import { dirname } from 'node:path';
 import { DEFAULT_TRACK_VOLUME } from '../audio/mixer.js';
 import { SETTINGS_PATH } from './paths.js';
 
-interface VibefiSettings {
+interface MusicliSettings {
   schemaVersion: 1;
   updatedAt: string;
   trackVolume?: number;
@@ -28,7 +28,7 @@ export function loadTrackVolume(settingsPath = SETTINGS_PATH): number | null {
   if (!existsSync(settingsPath)) return null;
 
   try {
-    const parsed = JSON.parse(readFileSync(settingsPath, 'utf8')) as Partial<VibefiSettings>;
+    const parsed = JSON.parse(readFileSync(settingsPath, 'utf8')) as Partial<MusicliSettings>;
     if (parsed.trackVolume === undefined) return null;
     return normalizeTrackVolume(parsed.trackVolume);
   } catch {
@@ -41,5 +41,5 @@ export function saveTrackVolume(volume: number, settingsPath = SETTINGS_PATH): v
     schemaVersion: 1,
     updatedAt: new Date().toISOString(),
     trackVolume: normalizeTrackVolume(volume),
-  } satisfies VibefiSettings);
+  } satisfies MusicliSettings);
 }

@@ -75,8 +75,8 @@ if (starterCategories.size !== starterTracks.length) {
 
 const fullManifest = buildPackManifest({
   name: 'full',
-  title: 'Vibefi Full Library',
-  description: 'The complete curated Vibefi library.',
+  title: 'Musicli Full Library',
+  description: 'The complete curated Musicli library.',
   version,
   generatedAt,
   catalog,
@@ -95,8 +95,8 @@ const starterManifest = buildPackManifest({
 
 const repositoryLocal = {
   schemaVersion: 1,
-  id: 'vibefi-local-library',
-  title: 'Vibefi Local Library Source',
+  id: 'musicli-local-library',
+  title: 'Musicli Local Library Source',
   version,
   generatedAt,
   contentBase: '..',
