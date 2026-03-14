@@ -42,6 +42,7 @@ test('renderWelcomeOverlay shows local and stream options', () => {
   assert.match(text, /Stream URL/);
   assert.match(text, /Nothing plays until you choose a source/i);
   assert.match(text, /system picker/i);
+  assert.match(text, /← → \/ ↑ ↓ move/);
 });
 
 test('renderSourceEditorOverlay shows type, name, target, and errors', () => {

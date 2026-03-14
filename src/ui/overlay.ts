@@ -411,8 +411,10 @@ export function renderWelcomeOverlay(buffer: CellBuffer, state: WelcomeOverlaySt
     buffer,
     footerY,
     selected?.id === 'local'
-      ? (supportsPicker ? `enter browse  ${shortcutText}  o sources  q quit` : `enter edit path  ${shortcutText}  o sources  q quit`)
-      : `enter continue  ${shortcutText}  o sources  q quit`,
+      ? (supportsPicker
+        ? `← → / ↑ ↓ move  enter browse  ${shortcutText}  o sources  q quit`
+        : `← → / ↑ ↓ move  enter edit path  ${shortcutText}  o sources  q quit`)
+      : `← → / ↑ ↓ move  enter continue  ${shortcutText}  o sources  q quit`,
     PANEL_ACCENT,
     PANEL_BG,
     contentWidth,

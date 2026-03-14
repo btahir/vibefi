@@ -122,6 +122,13 @@ musicli --url https://example.com/stream.m3u8
 musicli --url https://www.youtube.com/watch?v=jfKfPfyJRdk
 ```
 
+Stream support is best-effort and meant for user-provided URLs.
+
+- If possible, prefer local folders or openly licensed packs.
+- YouTube support is optional and depends on third-party tooling such as `yt-dlp`.
+- Musicli is not affiliated with YouTube.
+- Accessing YouTube through third-party tools may violate YouTube's Terms of Service. If you use YouTube URLs, you are responsible for complying with YouTube's terms and any applicable law.
+
 Inside the app, press `o` to open `Sources`.
 
 - `a` adds a local folder and opens the native folder picker when available
@@ -215,7 +222,7 @@ The footer keeps the primary actions visible. Press `?` for the full help card, 
 
 | Key | Action |
 |---|---|
-| `Up` / `Down` | Choose `Local Folder`, `Stream URL`, or `Saved Sources` |
+| `Left` / `Right` or `Up` / `Down` | Choose `Local Folder`, `Stream URL`, or `Saved Sources` |
 | `1` / `2` / `3` | Jump straight to the matching welcome option |
 | `Enter` | Continue with the selected option |
 | `q` | Quit from the idle start screen |
@@ -368,7 +375,9 @@ npm run library:stage
 
 ## Disclaimer
 
-`musicli` is designed for use with local folders, installable library packs, and user-provided stream URLs. If you use external sources, including YouTube via `yt-dlp`, you are responsible for complying with the source platform's terms and any applicable laws.
+`musicli` is designed for use with local folders, installable library packs, and user-provided stream URLs. The safest path is to use local music you own or are licensed to play. Stream support is optional and best-effort.
+
+`musicli` is not affiliated with YouTube. Accessing YouTube through third-party tooling may violate YouTube's Terms of Service. If you use YouTube URLs or any other external source, you are responsible for making sure your use complies with the source platform's terms, the rights of the content owners, and any applicable law.
 
 ---
 

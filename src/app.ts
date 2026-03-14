@@ -935,6 +935,14 @@ export async function startApp(opts: AppOptions): Promise<void> {
         welcomeSelectedIndex = Math.min(options.length - 1, welcomeSelectedIndex + 1);
         return true;
       }
+      if (key === 'left' || key === 'h') {
+        welcomeSelectedIndex = Math.max(0, welcomeSelectedIndex - 1);
+        return true;
+      }
+      if (key === 'right' || key === 'l') {
+        welcomeSelectedIndex = Math.min(options.length - 1, welcomeSelectedIndex + 1);
+        return true;
+      }
       if (key === 'enter') {
         const selected = options[Math.max(0, Math.min(welcomeSelectedIndex, options.length - 1))];
         if (!selected) return true;
