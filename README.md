@@ -148,6 +148,26 @@ vibefi --folder "/Volumes/Archive/Focus Mixes"
 
 Inside the app, press `o`, then `a`. On supported systems that opens a native folder picker; otherwise Vibefi falls back to a manual path editor.
 
+### Load Open Lo-fi
+
+`Open Lo-fi` is published separately at `https://github.com/btahir/open-lofi`.
+
+The simplest flow today is:
+
+1. Download `openlofi.zip` from the latest release.
+2. Extract it anywhere on your machine.
+3. Point Vibefi at the extracted folder.
+
+Example:
+
+```bash
+curl -L https://github.com/btahir/open-lofi/releases/latest/download/openlofi.zip -o openlofi.zip
+unzip openlofi.zip -d ~/Music/open-lofi
+vibefi --folder ~/Music/open-lofi
+```
+
+Or just run `vibefi`, choose `Local Folder`, and pick the extracted `open-lofi` folder from the welcome flow.
+
 Local folders can be:
 
 - a single folder full of tracks
