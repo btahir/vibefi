@@ -1,4 +1,4 @@
-import { spawn, type ChildProcessByStdio } from 'node:child_process';
+import { execFileSync, spawn, type ChildProcessByStdio } from 'node:child_process';
 import { join } from 'node:path';
 import type { Readable } from 'node:stream';
 import Speaker from 'speaker';
@@ -32,11 +32,44 @@ interface Pipeline {
 }
 
 let pipelineCounter = 0;
+const durationCache = new Map<string, number | null>();
 
 function formatErrorMessage(prefix: string, detail?: string): string {
   const trimmed = detail?.trim();
   if (!trimmed) return prefix;
   return `${prefix}\n${trimmed}`;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
+function probeTrackDuration(track: string): number | null {
+  if (!track) return null;
+  if (durationCache.has(track)) return durationCache.get(track) ?? null;
+
+  try {
+    const output = execFileSync(
+      'ffprobe',
+      [
+        '-v',
+        'error',
+        '-show_entries',
+        'format=duration',
+        '-of',
+        'default=noprint_wrappers=1:nokey=1',
+        track,
+      ],
+      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
+    ).trim();
+    const parsed = Number.parseFloat(output);
+    const duration = Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+    durationCache.set(track, duration);
+    return duration;
+  } catch {
+    durationCache.set(track, null);
+    return null;
+  }
 }
 
 export class AudioEngine {
@@ -48,9 +81,11 @@ export class AudioEngine {
   private stopped = true;
   private trackPosition = 0;
   private trackResumedAt = 0;
+  private trackDuration: number | null;
 
   constructor(options: EngineOptions) {
     this.options = options;
+    this.trackDuration = options.url ? null : probeTrackDuration(options.track);
   }
 
   start(): void {
@@ -113,12 +148,14 @@ export class AudioEngine {
     this.options.track = track;
     this.options.url = undefined;
     this.trackPosition = 0;
+    this.trackDuration = probeTrackDuration(track);
     this.scheduleRestart();
   }
 
   setStream(url: string): void {
     this.options.url = url;
     this.trackPosition = 0;
+    this.trackDuration = null;
     this.scheduleRestart();
   }
 
@@ -130,9 +167,49 @@ export class AudioEngine {
     return this.options.track;
   }
 
+  canSeek(): boolean {
+    return !this.options.url;
+  }
+
+  getPlaybackPosition(): number {
+    return this.getTrackPosition();
+  }
+
+  getTrackDuration(): number | null {
+    return this.trackDuration;
+  }
+
+  seekBy(deltaSeconds: number): boolean {
+    if (this.options.url) return false;
+
+    const currentPosition = this.getTrackPosition();
+    const upperBound = this.trackDuration ?? Math.max(0, currentPosition + deltaSeconds);
+    const nextPosition = clamp(currentPosition + deltaSeconds, 0, upperBound);
+
+    if (Math.abs(nextPosition - currentPosition) < 0.01) return false;
+
+    this.trackPosition = nextPosition;
+
+    if (this.restartDebounce) {
+      clearTimeout(this.restartDebounce);
+      this.restartDebounce = null;
+    }
+
+    if (!this.paused && !this.stopped) {
+      this.restartFromCurrentPosition();
+    }
+
+    return true;
+  }
+
   private getTrackPosition(): number {
-    if (this.paused || !this.pipeline) return this.trackPosition;
-    return this.trackPosition + (Date.now() - this.trackResumedAt) / 1000;
+    const runningPosition =
+      this.paused || !this.pipeline
+        ? this.trackPosition
+        : this.trackPosition + (Date.now() - this.trackResumedAt) / 1000;
+
+    if (this.trackDuration === null) return Math.max(0, runningPosition);
+    return clamp(runningPosition, 0, this.trackDuration);
   }
 
   private scheduleRestart(): void {
@@ -146,7 +223,10 @@ export class AudioEngine {
   private restart(): void {
     if (this.stopped || this.paused) return;
     this.trackPosition = this.getTrackPosition();
+    this.restartFromCurrentPosition();
+  }
 
+  private restartFromCurrentPosition(): void {
     const oldPipeline = this.pipeline;
     this.pipeline = null;
     this.killPipeline(oldPipeline);

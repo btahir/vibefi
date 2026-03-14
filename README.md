@@ -114,6 +114,8 @@ musicli --scene-renderer chafa
 
 The `Track` row starts at `0.25` on first run. After that, Musicli remembers the last `Track` level you used in `~/.musicli/settings.json`.
 
+On local tracks, `[` and `]` seek backward or forward by `10s`. Streams stay live and do not expose seeking.
+
 ### Bring Your Own Stream
 
 ```bash
@@ -213,6 +215,7 @@ The footer keeps the primary actions visible. Press `?` for the full help card, 
 |---|---|
 | `Space` | Pause or resume |
 | `n` / `b` | Next or previous track |
+| `[` / `]` | Seek backward or forward `10s` on local tracks |
 | `m` | Mute or unmute all audio |
 | `s` | Reshuffle the queue |
 | `o` | Open the sources manager |

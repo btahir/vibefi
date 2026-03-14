@@ -30,12 +30,39 @@ export interface ChromeState {
   paused: boolean;
   muted: boolean;
   selectedChannel: number;
+  canSeek: boolean;
+  positionSeconds: number | null;
+  durationSeconds: number | null;
 }
 
 function displayTrackName(track: string): string {
   if (track.includes('://')) return track;
   const normalized = track.replace(/\\/g, '/');
   return normalized.slice(normalized.lastIndexOf('/') + 1).replace(/\.mp3$/, '');
+}
+
+function formatClock(seconds: number | null): string | null {
+  if (seconds === null || !Number.isFinite(seconds)) return null;
+
+  const whole = Math.max(0, Math.floor(seconds));
+  const hours = Math.floor(whole / 3600);
+  const minutes = Math.floor((whole % 3600) / 60);
+  const secs = whole % 60;
+
+  if (hours > 0) {
+    return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
+
+  return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
+function formatProgress(state: ChromeState): string | null {
+  const position = formatClock(state.positionSeconds);
+  const duration = formatClock(state.durationSeconds);
+
+  if (!position && !duration) return null;
+  if (position && duration) return `${position}/${duration}`;
+  return position ?? duration;
 }
 
 function renderSeparator(buffer: CellBuffer, y: number, width: number): void {
@@ -160,15 +187,20 @@ export function renderChrome(buffer: CellBuffer, layout: Layout, state: ChromeSt
       ? `${state.queuePosition}/${state.queueTotal}`
       : state.queueMode;
   const sourceText = `${state.sourceKind}: ${state.sourceLabel}`;
+  const progressText = formatProgress(state);
   const metaWide = `${sourceText} · ${state.category} · ${queueText}`;
+  const metaWideWithProgress = progressText ? `${metaWide} · ${progressText}` : metaWide;
   const metaMedium = `${sourceText} · ${queueText}`;
+  const metaMediumWithProgress = progressText ? `${metaMedium} · ${progressText}` : metaMedium;
   let nowPlaying: string;
   if (w >= 70) {
-    nowPlaying = `  \u266B  ${trackName} \u00B7 ${metaWide}`;
+    nowPlaying = `  \u266B  ${trackName} \u00B7 ${metaWideWithProgress}`;
   } else if (w >= 48) {
-    nowPlaying = `  \u266B ${trackName} \u00B7 ${metaMedium}`;
+    nowPlaying = `  \u266B ${trackName} \u00B7 ${metaMediumWithProgress}`;
   } else if (w >= 30) {
-    nowPlaying = `  \u266B ${trackName} \u00B7 ${queueText}`;
+    nowPlaying = progressText
+      ? `  \u266B ${trackName} \u00B7 ${progressText}`
+      : `  \u266B ${trackName} \u00B7 ${queueText}`;
   } else {
     nowPlaying = `  \u266B ${trackName}`;
   }
@@ -225,9 +257,13 @@ export function renderChrome(buffer: CellBuffer, layout: Layout, state: ChromeSt
   // Hints — tiered by width
   let hints: string;
   if (w >= 110) {
-    hints = '  [/] search  [o] sources  [space] pause  [n/b] skip  [s] shuffle  [m] mute  [↑↓] lane  [←→] mix  [tab] scene  [q] quit';
+    hints = state.canSeek
+      ? '  [/] search  [o] sources  [space] pause  [n/b] skip  [[]] seek  [s] shuffle  [m] mute  [↑↓] lane  [←→] mix  [tab] scene  [q] quit'
+      : '  [/] search  [o] sources  [space] pause  [n/b] skip  [s] shuffle  [m] mute  [↑↓] lane  [←→] mix  [tab] scene  [q] quit';
   } else if (w >= 88) {
-    hints = '  [/] search  [o] sources  [space] pause  [n/b] skip  [s] shuffle  [m] mute  [tab] scene  [q] quit';
+    hints = state.canSeek
+      ? '  [/] search  [o] sources  [space] pause  [n/b] skip  [[]] seek  [s] shuffle  [m] mute  [q] quit'
+      : '  [/] search  [o] sources  [space] pause  [n/b] skip  [s] shuffle  [m] mute  [tab] scene  [q] quit';
   } else if (w >= 70) {
     hints = '  /:search o:sources sp:pause n/b:skip s:shuffle m:mute q:quit';
   } else if (w >= 50) {

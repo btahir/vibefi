@@ -55,3 +55,30 @@ test('buildArgs includes ambient tracks without throwing', () => {
 
   engine.stop();
 });
+
+test('seekBy updates local playback position and ignores stream sources', () => {
+  const engine = new AudioEngine({
+    track: '/tmp/example.mp3',
+    mixerState: defaultMixerState(),
+  });
+
+  (engine as unknown as { trackDuration: number | null }).trackDuration = 120;
+
+  assert.equal(engine.canSeek(), true);
+  assert.equal(engine.seekBy(10), true);
+  assert.equal(engine.getPlaybackPosition(), 10);
+
+  assert.equal(engine.seekBy(-30), true);
+  assert.equal(engine.getPlaybackPosition(), 0);
+
+  assert.equal(engine.seekBy(200), true);
+  assert.equal(engine.getPlaybackPosition(), 120);
+
+  engine.setStream('https://example.com/stream.m3u8');
+
+  assert.equal(engine.canSeek(), false);
+  assert.equal(engine.seekBy(-10), false);
+  assert.equal(engine.getTrackDuration(), null);
+
+  engine.stop();
+});

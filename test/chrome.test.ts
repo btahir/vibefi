@@ -37,6 +37,9 @@ test('renderChrome groups track and ambience with exact 0.05 values', () => {
     paused: false,
     muted: false,
     selectedChannel: 6,
+    canSeek: false,
+    positionSeconds: null,
+    durationSeconds: null,
   });
 
   const trackHeader = rowText(buffer, layout.volumeBars.y);
@@ -66,5 +69,39 @@ test('renderChrome groups track and ambience with exact 0.05 values', () => {
   assert.match(cityLane, /0\.05/);
   assert.ok(cityLane.includes('▕') && cityLane.includes('▏'));
   assert.match(hintsRow, /n\/b/);
+  assert.doesNotMatch(hintsRow, /seek/);
   assert.match(hintsRow, /q/);
+});
+
+test('renderChrome shows progress and seek hints when the current source can seek', () => {
+  const mixer = defaultMixerState();
+  mixer.music = 0.65;
+
+  const width = 112;
+  const height = 26;
+  const layout = computeLayout(width, height);
+  const buffer = new CellBuffer(width, height);
+
+  renderChrome(buffer, layout, {
+    mixer,
+    track: 'rooftop-drift',
+    category: 'late-night',
+    sourceLabel: 'Bedroom Lofi',
+    sourceKind: 'folder',
+    queuePosition: 3,
+    queueTotal: 18,
+    queueMode: 'curated',
+    paused: false,
+    muted: false,
+    selectedChannel: 0,
+    canSeek: true,
+    positionSeconds: 72,
+    durationSeconds: 228,
+  });
+
+  const nowPlayingRow = rowText(buffer, layout.nowPlaying.y);
+  const hintsRow = rowText(buffer, layout.hints.y);
+
+  assert.match(nowPlayingRow, /01:12\/03:48/);
+  assert.match(hintsRow, /\[\[\]\] seek/);
 });

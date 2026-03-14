@@ -440,6 +440,7 @@ export function renderHelpOverlay(buffer: CellBuffer): void {
   row = renderHelpSection(buffer, contentX, row, maxWidth, 'Playback', [
     { key: 'space', action: 'pause or resume' },
     { key: 'n / b', action: 'next or previous track' },
+    { key: '[ / ]', action: 'seek backward or forward 10s (local tracks only)' },
     { key: 'm', action: 'mute all audio' },
     { key: 's', action: 'reshuffle the queue' },
     { key: 'o', action: 'open the sources manager' },

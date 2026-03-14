@@ -78,6 +78,7 @@ export interface AppOptions {
 }
 
 const VOLUME_STEP = 0.05;
+const SEEK_STEP_SECONDS = 10;
 
 type SourceEditorField = 'type' | 'label' | 'target';
 type SourceEditorKind = 'local' | 'stream';
@@ -1304,6 +1305,8 @@ export async function startApp(opts: AppOptions): Promise<void> {
   onKey('n', playNextTrack);
   onKey('b', playPreviousTrack);
   onKey('p', playPreviousTrack);
+  onKey('[', () => engine?.seekBy(-SEEK_STEP_SECONDS));
+  onKey(']', () => engine?.seekBy(SEEK_STEP_SECONDS));
   onKey('s', reshuffleQueue);
   onKey('r', reshuffleQueue);
   onKey('q', () => shutdown(0));
@@ -1342,6 +1345,9 @@ export async function startApp(opts: AppOptions): Promise<void> {
       paused: engine.isPaused(),
       muted: engine.isMuted(),
       selectedChannel,
+      canSeek: !activeUrl && engine.canSeek(),
+      positionSeconds: !activeUrl ? engine.getPlaybackPosition() : null,
+      durationSeconds: !activeUrl ? engine.getTrackDuration() : null,
     };
     renderChrome(currentBuffer, layout, chromeState);
 
