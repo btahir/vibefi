@@ -13,7 +13,7 @@ export async function showSplash(): Promise<void> {
       const grad = gradient(['#667eea', '#764ba2']);
       const colored = grad.multiline(result);
       process.stdout.write('\n' + colored + '\n');
-      process.stdout.write('  \x1b[90myour focus room in the terminal\x1b[0m\n\n');
+      process.stdout.write('  \x1b[90mA simple music player in your terminal\x1b[0m\n\n');
       setTimeout(resolve, 2000);
     });
   });

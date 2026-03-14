@@ -1,7 +1,7 @@
 {
   "name": "@bilalpm/musicli",
   "version": "0.1.2",
-  "description": "your focus room in the terminal",
+  "description": "A simple music player in your terminal",
   "type": "module",
   "bin": {
     "musicli": "./dist/index.js"

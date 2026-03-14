@@ -1,6 +1,6 @@
 # Musicli
 
-### *your focus room in the terminal*
+### *A simple music player in your terminal*
 
 ![musicli hero](docs/images/hero.png)
 

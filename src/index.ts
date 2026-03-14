@@ -90,7 +90,7 @@ function createLibrarySourceOption(): Option {
 
 program
   .name('musicli')
-  .description('your focus room in the terminal')
+  .description('A simple music player in your terminal')
   .showHelpAfterError()
   .version(packageJson.version);
 
